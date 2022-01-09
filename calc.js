@@ -34,10 +34,10 @@ class ButtonClass extends React.Component{
         }
         else if((btnPushed >= 0 && btnPushed <= 9) || (btnPushed == "." && !this.state.calcVariable.includes('.')))
         {
-            if(this.state.calcVariable === '0' && btnPushed == "."){
+            if((this.state.calcVariable == '0' || this.state.calcVariable == '+' || this.state.calcVariable == '-' || this.state.calcVariable == 'x' || this.state.calcVariable == '/') && btnPushed == "."){
                 this.setState({calcVariable : "0."})
             }
-            else if(this.state.calcVariable === '0' && btnPushed != "."){
+            else if((this.state.calcVariable == '0' || this.state.calcVariable == '+' || this.state.calcVariable == '-' || this.state.calcVariable == 'x' || this.state.calcVariable == '/') && btnPushed != "."){
                 this.setState({calcVariable : btnPushed})
             }
             else{
@@ -47,14 +47,41 @@ class ButtonClass extends React.Component{
         else if(btnPushed == "+")
         {
             this.setState({firstValue: parseFloat(this.state.calcVariable)})
-            this.setState({calcVariable : '0'})
+            this.setState({calcVariable : '+'})
             this.setState({mathOperation : '+'})
+        }
+        else if(btnPushed == "-")
+        {
+            this.setState({firstValue: parseFloat(this.state.calcVariable)})
+            this.setState({calcVariable : '-'})
+            this.setState({mathOperation : '-'})
+        }
+        else if(btnPushed == "x")
+        {
+            this.setState({firstValue: parseFloat(this.state.calcVariable)})
+            this.setState({calcVariable : 'x'})
+            this.setState({mathOperation : 'x'})
+        }
+        else if(btnPushed == "/")
+        {
+            this.setState({firstValue: parseFloat(this.state.calcVariable)})
+            this.setState({calcVariable : '/'})
+            this.setState({mathOperation : '/'})
         }
         else if(btnPushed == "=")
         {
-            this.setState({secondValue : parseFloat(this.state.calcVariable)})
+            //this.setState({secondValue : parseFloat(this.state.calcVariable)})
             if(this.state.mathOperation == '+'){
-                this.setState({calcVariable: (this.state.firstValue + this.state.secondValue)})
+                this.setState({calcVariable: (this.state.firstValue + parseFloat(this.state.calcVariable))})
+            }
+            else if(this.state.mathOperation == '-'){
+                this.setState({calcVariable: (this.state.firstValue - parseFloat(this.state.calcVariable))})
+            }
+            else if(this.state.mathOperation == 'x'){
+                this.setState({calcVariable: (this.state.firstValue * parseFloat(this.state.calcVariable))})
+            }
+            else if(this.state.mathOperation == '/'){
+                this.setState({calcVariable: (this.state.firstValue / parseFloat(this.state.calcVariable))})
             }
         }
     }
