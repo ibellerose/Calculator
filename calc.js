@@ -1,28 +1,10 @@
 
-// class CalcScreenClass extends React.Component{
-//     constructor(props){
-//         super(props);
-        
-//         this.state = {calcVariable: 0};
-//     }
-
-//     render(){
-//         return(
-//             <div class="screen">
-//                 <div id="calcNumber">
-//                     {this.state.calcVariable}
-//                 </div>
-//             </div>
-//         )
-//     }
-// }
-
 
 class ButtonClass extends React.Component{
     constructor(props){
         super(props);
         
-        this.state = {calcVariable: '0', firstValue: 0, secondValue: 0, mathOperation: '+'};
+        this.state = {calcVariable: '0', mathStatement: ''};
 
         //binding method
         this.addToScreen = this.addToScreen.bind(this);
@@ -30,59 +12,118 @@ class ButtonClass extends React.Component{
 
     addToScreen = (btnPushed) => {
         if(btnPushed == "AC"){
-            this.setState({calcVariable: '0', firstValue: 0, secondValue: 0, mathOperation: '+'})
+            this.setState({calcVariable: '0', mathStatement: ''})
         }
         else if((btnPushed >= 0 && btnPushed <= 9) || (btnPushed == "." && !this.state.calcVariable.includes('.')))
         {
             if((this.state.calcVariable == '0' || this.state.calcVariable == '+' || this.state.calcVariable == '-' || this.state.calcVariable == 'x' || this.state.calcVariable == '/') && btnPushed == "."){
-                this.setState({calcVariable : "0."})
+                this.setState({calcVariable : "0.", mathStatement : this.state.mathStatement + "0."})
             }
             else if((this.state.calcVariable == '0' || this.state.calcVariable == '+' || this.state.calcVariable == '-' || this.state.calcVariable == 'x' || this.state.calcVariable == '/') && btnPushed != "."){
-                this.setState({calcVariable : btnPushed})
+                this.setState({calcVariable : btnPushed, mathStatement : this.state.mathStatement + btnPushed})
             }
             else{
-                this.setState({calcVariable : this.state.calcVariable + btnPushed})
+                this.setState({calcVariable : this.state.calcVariable + btnPushed, mathStatement : this.state.mathStatement + btnPushed})
             }
         }
         else if(btnPushed == "+")
         {
-            this.setState({firstValue: parseFloat(this.state.calcVariable)})
-            this.setState({calcVariable : '+'})
-            this.setState({mathOperation : '+'})
+            if(this.state.calcVariable != '+' && this.state.calcVariable != 'x' && this.state.calcVariable != '/' && this.state.calcVariable != '-'){
+                this.setState({calcVariable : '+', mathStatement : this.state.mathStatement + "+"})
+            }
+            else{
+                if(this.state.mathStatement.substring(this.state.mathStatement.length - 2, this.state.mathStatement.length) == '--'){
+                    this.setState({calcVariable : '+', mathStatement : this.state.mathStatement.substring(0, this.state.mathStatement.length - 2) + "+"})
+                }
+                else{
+                    let last2 = this.state.mathStatement.substring(this.state.mathStatement.length - 2, this.state.mathStatement.length);
+
+                    if(last2 == '+-' || last2 == '*-' || last2 == '/-'){
+                        this.setState({calcVariable : '+', mathStatement : this.state.mathStatement.substring(0, this.state.mathStatement.length - 2) + "+"})
+                    }
+                    else{
+                        this.setState({calcVariable : '+', mathStatement : this.state.mathStatement.substring(0, this.state.mathStatement.length - 1) + "+"})
+                    }
+                }
+            }
+            
+            if(this.state.mathStatement.indexOf('=') >= 0){
+                this.setState({mathStatement : this.state.mathStatement.substring(this.state.mathStatement.indexOf('=')+1, this.state.mathStatement.length) + "+"})
+            }
+
         }
         else if(btnPushed == "-")
         {
-            this.setState({firstValue: parseFloat(this.state.calcVariable)})
-            this.setState({calcVariable : '-'})
-            this.setState({mathOperation : '-'})
+            let last2 = this.state.mathStatement.substring(this.state.mathStatement.length - 2, this.state.mathStatement.length);
+
+            if(this.state.calcVariable != '+' && this.state.calcVariable != 'x' && this.state.calcVariable != '/' && last2 != '--' && last2 != '*-' && last2 != '/-' && last2 != '+-'){
+                this.setState({calcVariable : '-', mathStatement : this.state.mathStatement + "-"})
+            }
+            else{
+                last2 = this.state.mathStatement.substring(this.state.mathStatement.length - 2, this.state.mathStatement.length);
+
+                if(last2 != '--' && last2 != '*-' && last2 != '/-' && last2 != '+-'){
+                    this.setState({calcVariable : '-', mathStatement : this.state.mathStatement + "-"})
+                }
+            }
+            if(this.state.mathStatement.indexOf('=') >= 0){
+                this.setState({mathStatement : this.state.mathStatement.substring(this.state.mathStatement.indexOf('=')+1, this.state.mathStatement.length) + "-"})
+            }
         }
         else if(btnPushed == "x")
         {
-            this.setState({firstValue: parseFloat(this.state.calcVariable)})
-            this.setState({calcVariable : 'x'})
-            this.setState({mathOperation : 'x'})
+            if(this.state.calcVariable != '+' && this.state.calcVariable != 'x' && this.state.calcVariable != '/' && this.state.calcVariable != '-'){
+                this.setState({calcVariable : 'x', mathStatement : this.state.mathStatement + "*"})
+            }
+            else{
+                if(this.state.mathStatement.substring(this.state.mathStatement.length - 2, this.state.mathStatement.length) == '--'){
+                    this.setState({calcVariable : 'x', mathStatement : this.state.mathStatement.substring(0, this.state.mathStatement.length - 2) + "*"})
+                }
+                else{
+                    let last2 = this.state.mathStatement.substring(this.state.mathStatement.length - 2, this.state.mathStatement.length);
+
+                    if(last2 == '+-' || last2 == '*-' || last2 == '/-'){
+                        this.setState({calcVariable : 'x', mathStatement : this.state.mathStatement.substring(0, this.state.mathStatement.length - 2) + "*"})
+                    }
+                    else{
+                        this.setState({calcVariable : 'x', mathStatement : this.state.mathStatement.substring(0, this.state.mathStatement.length - 1) + "*"})
+                    }
+                }
+            }
+            if(this.state.mathStatement.indexOf('=') >= 0){
+                this.setState({mathStatement : this.state.mathStatement.substring(this.state.mathStatement.indexOf('=')+1, this.state.mathStatement.length) + "*"})
+            }
         }
         else if(btnPushed == "/")
         {
-            this.setState({firstValue: parseFloat(this.state.calcVariable)})
-            this.setState({calcVariable : '/'})
-            this.setState({mathOperation : '/'})
+            if(this.state.calcVariable != '+' && this.state.calcVariable != 'x' && this.state.calcVariable != '/' && this.state.calcVariable != '-'){
+                this.setState({calcVariable : '/', mathStatement : this.state.mathStatement + "/"})
+            }
+            else{
+                if(this.state.mathStatement.substring(this.state.mathStatement.length - 2, this.state.mathStatement.length) == '--'){
+                    this.setState({calcVariable : '/', mathStatement : this.state.mathStatement.substring(0, this.state.mathStatement.length - 2) + "/"})
+                }
+                else{
+                    let last2 = this.state.mathStatement.substring(this.state.mathStatement.length - 2, this.state.mathStatement.length);
+
+                    if(last2 == '+-' || last2 == '*-' || last2 == '/-'){
+                        this.setState({calcVariable : '/', mathStatement : this.state.mathStatement.substring(0, this.state.mathStatement.length - 2) + "/"})
+                    }
+                    else{
+                        this.setState({calcVariable : '/', mathStatement : this.state.mathStatement.substring(0, this.state.mathStatement.length - 1) + "/"})
+                    }
+                }
+            }
+            if(this.state.mathStatement.indexOf('=') >= 0){
+                this.setState({mathStatement : this.state.mathStatement.substring(this.state.mathStatement.indexOf('=')+1, this.state.mathStatement.length) + "/"})
+            }
         }
         else if(btnPushed == "=")
         {
-            //this.setState({secondValue : parseFloat(this.state.calcVariable)})
-            if(this.state.mathOperation == '+'){
-                this.setState({calcVariable: (this.state.firstValue + parseFloat(this.state.calcVariable))})
-            }
-            else if(this.state.mathOperation == '-'){
-                this.setState({calcVariable: (this.state.firstValue - parseFloat(this.state.calcVariable))})
-            }
-            else if(this.state.mathOperation == 'x'){
-                this.setState({calcVariable: (this.state.firstValue * parseFloat(this.state.calcVariable))})
-            }
-            else if(this.state.mathOperation == '/'){
-                this.setState({calcVariable: (this.state.firstValue / parseFloat(this.state.calcVariable))})
-            }
+            let mathExp = this.state.mathStatement;
+            let finalExp = mathExp.replace('--', '+');
+
+            this.setState({calcVariable: eval(finalExp), mathStatement : this.state.mathStatement + "=" + eval(finalExp)})
         }
     }
 
@@ -90,13 +131,16 @@ class ButtonClass extends React.Component{
         return(
             <div>
                 <div class="screen">
-                    <div id="calcNumber">
+                    <div id="fullStatementDisplay">
+                        {this.state.mathStatement}
+                    </div>
+                    <div id="display">
                         {this.state.calcVariable}
                     </div>
                 </div>
 
                 <div class="numberButtonWrapper">
-                    <button onClick={() => this.addToScreen("AC")} class="numberButton" id="buttonAC">AC</button>
+                    <button onClick={() => this.addToScreen("AC")} class="numberButton" id="clear">AC</button>
                     <button onClick={() => this.addToScreen("/")} class="mathButton" id="divide">/</button>
                     <button onClick={() => this.addToScreen("x")} class="mathButton" id="multiply">x</button>
                     <button onClick={() => this.addToScreen("7")} class="numberButton" id="seven">7</button>
@@ -112,7 +156,7 @@ class ButtonClass extends React.Component{
                     <button onClick={() => this.addToScreen("3")} class="numberButton" id="three">3</button>
                     <button onClick={() => this.addToScreen("=")} class="numberButton" id="equal">=</button>
                     <button onClick={() => this.addToScreen("0")} class="numberButton" id="zero">0</button>
-                    <button onClick={() => this.addToScreen(".")} class="numberButton" id="buttonDot">.</button>
+                    <button onClick={() => this.addToScreen(".")} class="numberButton" id="decimal">.</button>
                 </div>
             </div>
         )

@@ -86,11 +86,19 @@ body {
   left: 10px;
 }
 
-#calcNumber {
+#display {
   position: absolute;
   right: 10px;
   bottom: 0px;
-  color: #ebeb62;
+  color: white;
   font-size: 48px;
+}
+
+#fullStatementDisplay {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  color: #ffbb00;
+  font-size: 20px;
 }
 /*# sourceMappingURL=calc.css.map */

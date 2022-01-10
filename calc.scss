@@ -81,10 +81,18 @@ body {
     left: 10px;
 }
 
-#calcNumber{
+#display{
     position: absolute;
     right: 10px;
     bottom: 0px;
-    color: rgb(235, 235, 98);
+    color: rgb(255, 255, 255);
     font-size: 48px;
+}
+
+#fullStatementDisplay{
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    color: rgb(255, 187, 0);
+    font-size: 20px;
 }
